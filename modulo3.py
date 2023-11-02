@@ -1,4 +1,4 @@
-class medicamentoN:
+class Medicamento:
     def __init__(self, nome,quantidade, principio_ativo,dosagem,administracao,fabricante, lote, datadevalidade):
         self.nome = nome
         self.quantidade = quantidade
@@ -9,10 +9,13 @@ class medicamentoN:
         self.lote = lote
         self.datadevalidade = datadevalidade
 
-medicamento1 = medicamentoN("Dorflex", 20, "Dipirona", "500mg", "Oral", "EMS", "123456", "12/02/2023")
+#Medicamentos Base
+medicamento1 = Medicamento("Dorflex", 20, "Dipirona", "500mg", "Oral", "EMS", "N012", "31/01/2024")
+medicamento2 = Medicamento("Tylenol", 45, "Parecetamol", "750mg", "Oral", "Janseen", "K123", "31/12/2023")
 
 medicamentos = [
-    medicamento1
+    medicamento1,
+    medicamento2
 ]
 
 def menuInicial():
@@ -35,12 +38,14 @@ def menuInicial():
             case _:
                 print("\nOpção inválida, tente novamente!\n")
                 menuInicial()  
-    except ValueError:
+    
+        menuInicial()
+    except:
         print("\nOpção inválida, tente novamente!\n")
         menuInicial()
-
 def adicionarMedicamento():
     inFuncao = True
+    count = -1
     visualizarEstoque(inFuncao)
 
     print("\n---- Cadastro de Medicamentos ----\n")
@@ -48,15 +53,8 @@ def adicionarMedicamento():
     nomeMedicamento = input("Nome do medicamento: ")
     #Verificando se o medicamento ja existe no estoque
     for medicamento in medicamentos:
-        if nomeMedicamento == medicamento.nome:
-            print("\nMedicamento já cadastrado!\n")
-            userInput = input("Deseja atualizar a quantidade do medicamento? (S/N): ")
-            if userInput == "S" or userInput == "s":
-                quantidade = int(input("Digite a quantidade que deseja adicionar: "))
-                medicamento.quantidade += quantidade
-                print("\nQuantidade atualizada com sucesso!\n")
-                menuInicial()
-        else:
+        count += 1
+        if count == len(medicamentos):
             quantidadeMedicamento = int(input("Quantidade: "))        
             principioAtivo = input("Principio ativo: ")
             dosagem = input("Dosagem: ")
@@ -65,10 +63,23 @@ def adicionarMedicamento():
             lote = input("Lote: ")
             dataDeValidade = input("Data de validade: ")
 
-            medicamentoNovo = medicamentoN(nomeMedicamento, quantidadeMedicamento, principioAtivo, dosagem, administracao, fabricante, lote, dataDeValidade)
+            medicamentoNovo = Medicamento(nomeMedicamento, quantidadeMedicamento, principioAtivo, dosagem, administracao, fabricante, lote, dataDeValidade)
             medicamentos.append(medicamentoNovo)
             print("\nMedicamento adicionado com sucesso!\n")
             menuInicial()
+        else:
+            if nomeMedicamento.lower() == medicamento.nome.lower():
+                print("\nMedicamento já cadastrado!\n")
+                userInput = input("Deseja atualizar a quantidade do medicamento? (S/N): ")
+                if userInput.lower() == "s":
+                    quantidade = int(input(f"Digite a quantidade que deseja adicionar (QTD Atual: {medicamento.quantidade}): "))
+                    medicamento.quantidade += quantidade
+                    print("\nQuantidade atualizada com sucesso!\n")
+                    menuInicial()
+                else:
+                    print("\nALERTA!  Operação cancelada!\n")
+                    menuInicial()
+            
 
 def visualizarEstoque(inFuncao):
     count = 1
@@ -81,10 +92,36 @@ def visualizarEstoque(inFuncao):
         menuInicial()
 
 def removerMedicamento():
-    pass
+    infuncao = True
+    count = -1
+    visualizarEstoque(infuncao)
+
+    print("\n---- Remover Medicamento ----\n")
+    userInput = input("\nDigite o nome do medicamento que deseja remover: ")
+
+    for medicamento in medicamentos:
+        count += 1
+        if count == len(medicamentos):
+            print("\nMedicamento não encontrado!\n")
+            menuInicial()
+        elif userInput.lower() == medicamento.nome.lower():
+            print(f"\nMedicamento {medicamento.nome} encontrado!\n")
+            userInput2 = int(input(f"Qual a quantidade deseja remover do medicamento? (QTD Atual: {medicamento.quantidade}): "))
+            if userInput2 >= medicamento.quantidade:
+                medicamentos.remove(medicamento)
+                print("O medicamento foi excluido do estoque!")
+                menuInicial()
+            else:
+                medicamento.quantidade -= userInput2
+                print(f"A quantidade foi atualizada com sucesso! (QTD Atual: {medicamento.quantidade})")
+                menuInicial() 
+        else:
+            print("Valor inválido, tente novamente!")
+            removerMedicamento()              
 def rastrearLote():
     pass
 def administrarMedicamento():
     pass
-        
+
 menuInicial()
+    
