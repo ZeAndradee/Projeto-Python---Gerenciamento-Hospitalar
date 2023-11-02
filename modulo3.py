@@ -62,7 +62,7 @@ def adicionarMedicamento():
             print("\nMedicamento já cadastrado!\n")
             userInput = input("Deseja atualizar a quantidade do medicamento? (S/N): ")
             if userInput.lower() == "s":
-                quantidade = int(input(f"Digite a quantidade que deseja adicionar (QTD Atual: {medicamento.quantidade}): "))
+                quantidade = int(input(f"Digite a quantidade que deseja adicionar (Qtd. Atual: {medicamento.quantidade}): "))
                 medicamento.quantidade += quantidade
                 print("\nQuantidade atualizada com sucesso!\n")
                 menuInicial()
@@ -105,23 +105,25 @@ def removerMedicamento():
 
         print("\n---- Remover Medicamento ----\n")
         userInput = input("\nDigite o nome do medicamento que deseja remover: ")
-
         medicamento_encontrado = False
+
         for medicamento in medicamentos:
             if userInput.lower() == medicamento.nome.lower():
                 medicamento_encontrado = True
                 print(f"\nMedicamento {medicamento.nome} encontrado!\n")
-                userInput2 = int(input(f"Qual a quantidade deseja remover do medicamento? (QTD Atual: {medicamento.quantidade}): "))
+                userInput2 = int(input(f"Qual a quantidade deseja remover do medicamento? (Qtd. Atual: {medicamento.quantidade}): "))
                 if userInput2 >= medicamento.quantidade:
-                    medicamentos.remove(medicamento)
-                    print("O medicamento foi excluido do estoque!")
-                    menuInicial()
+                    medicamento.quantidade -= medicamento.quantidade
+                    print("\nQuantidade maxima retirada!\n")
+                    with open("logAlertas.txt", 'a') as arquivo:
+                        arquivo.write(f"| MEDICAMENTO RETIRADO | Medicamento: {medicamento.nome} - Quantidade Retirada: {userInput2}\n")
+                    menuInicial()     
                 else:
                     medicamento.quantidade -= userInput2
-                    print(f"A quantidade foi atualizada com sucesso! (QTD Atual: {medicamento.quantidade})")
+                    print(f"A quantidade foi atualizada com sucesso! (Qtd. Atual: {medicamento.quantidade})")
+                    with open("logAlertas.txt", 'a') as arquivo:
+                        arquivo.write(f"| MEDICAMENTO RETIRADO | Medicamento: {medicamento.nome} - Quantidade Retirada: {userInput2}\n")
                     menuInicial()
-                break
-
         if not medicamento_encontrado:
             print("\nMedicamento não encontrado!\n")
             menuInicial()
@@ -145,7 +147,7 @@ def rastrearLote():
             print(f"Lote: {medicamento.lote}\nData de validade: {medicamento.datadevalidade}\n")
 
             with open("logAlertas.txt", 'a') as arquivo:
-                arquivo.write(f"| Rastreio Lote | Medicamento: {medicamentoNovo.nome} - Lote: {medicamento.lote}\n")
+                arquivo.write(f"| Rastreio Lote | Medicamento: {medicamento.nome} - Lote: {medicamento.lote}\n")
     if not medicamento_encontrado:
         print("\nMedicamento ou lote não encontrado!\n")
         menuInicial() 
@@ -153,38 +155,47 @@ def rastrearLote():
 
 
 def administrarMedicamento():
-    print("\n---- Administrar Medicamento ----\n")
     inFuncao = True
     visualizarEstoque(inFuncao)
+    print("\n---- Administrar Medicamento ----\n")
     medicamento_encontrado = False
     userInput = input("\nDigite o nome do medicamento que deseja administrar: ")
     for medicamento in medicamentos:
         if userInput.lower() == medicamento.nome.lower():
             medicamento_encontrado = True
             print(f"\nMedicamento {medicamento.nome} encontrado!\n")
-            userInput2 = int(input(f"Qual a quantidade deseja administrar do medicamento? (QTD Atual: {medicamento.quantidade}): "))
-            if userInput2 > medicamento.quantidade:
-                print("Alerta!  Quantidade superior ao disponível em estoque, tente novamente!")
-                #TODO Adicionar arquivos de log
+            qtdAdm = int(input(f"Qual a quantidade deseja administrar do medicamento? (Qtd. Atual: {medicamento.quantidade}): "))
+            dose = float(input("Digite a dosagem administrada (mg): "))
+            paciente = "None"
+            respAdm = "None"
+            if qtdAdm > medicamento.quantidade or qtdAdm <= 0:
+                print("\nAlerta!  Quantidade superior ao disponível em estoque, tente novamente!")
+                with open("logAlertas.txt", 'a') as arquivo:
+                    arquivo.write(f"| QTD SUPERIOR | Medicamento: {medicamento.nome} - Quantidade Requisitada {qtdAdm} - Quantidade Disponivel: {medicamento.quantidade}\n")
                 menuInicial()
             else:
-                medicamento.quantidade -= userInput2
-                print(f"O medicamento foi administrado com sucesso!")
+                medicamento.quantidade -= qtdAdm
                 now = datetime.now()
                 horaAtual = now.strftime("%d/%m/%Y %H:%M:%S")
-                print(f"Hora da administração: {horaAtual}")
-                with open("logAlertas.txt", 'a') as arquivo:
-                    arquivo.write(f"| ADIMINISTRAÇÃO | Medicamento: {medicamentoNovo.nome} - Quantidade: {medicamento.quantidade}\n")
-                menuInicial()
+
+                with open("logAdministracao.txt", 'a') as arquivo:
+                    arquivo.write(f"| ADIMINISTRACAO | Medicamento: {medicamento.nome} - Quantidade: {qtdAdm} - Dose Administrada: {dose}mg  - Dose Recomendada: {medicamento.dosagem}- Paciente: {paciente} - Responsavel Administracao: {respAdm} | ( {horaAtual} )\n")
+                
+                print(f"O medicamento foi administrado com sucesso!")
+                alertaEstoque = medicamento.qtdInicial * 0.2
+                if medicamento.quantidade <= alertaEstoque:
+                    print("\nAlerta!  O estoque do medicamento está baixo!\n")
+                    with open("logAlertas.txt", 'a') as arquivo:
+                        arquivo.write(f"| ESTOQUE BAIXO | Medicamento: {medicamento.nome} - Quantidade: {medicamento.quantidade} - Quantidade Inicial: {medicamento.qtdInicial}\n")
             break
     if not medicamento_encontrado:
         print("\nMedicamento não encontrado!\n")
         menuInicial()    
 
 with open("logAlertas.txt", 'a') as arquivo:
-    arquivo.write("------ Log de Alertas -----\n")
+    arquivo.write("\n\n------ Log de Alertas -----\n")
 
 with open("logAdministracao.txt", 'a') as arquivo:
-    arquivo.write("------ Log de Administração de Medicamentos -----\n")
+    arquivo.write("\n\n------ Log de Administracao de Medicamentos -----\n")
 menuInicial()
     
