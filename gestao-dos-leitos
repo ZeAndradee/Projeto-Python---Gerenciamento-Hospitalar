@@ -1,0 +1,147 @@
+# import datetime
+#import random
+#import time
+##RF01
+#hospital_data = {
+#    "uti": {
+#        "leito1": {"status": "ocupado", "paciente": "João","gravidade":"crítico","ingresso": datetime.datetime(2023, 11, 6, 16, 20)},
+#        "leito2": {"status": "livre", "paciente": "","gravidade":"crítico","ingresso": datetime.datetime(2023, 11, 3, 10, 0)},
+#        "leito3": {"status": "ocupado", "paciente": "Maria","gravidade":"crítico","ingresso": datetime.datetime(2023, 11, 8, 10, 40)},
+#        "leito5": {"status": "livre", "paciente": "","gravidade":"","ingresso":None},
+#        "leito6": {"status": "livre", "paciente": "","gravidade":"","ingresso":None},
+#        "leito4": {"status": "livre", "paciente": "","gravidade":"","ingresso":None},
+#        "leito7": {"status": "livre", "paciente": "","gravidade":"","ingresso":None},
+#        "leito8": {"status": "livre", "paciente": "","gravidade":"","ingresso":None},
+#        "leito9": {"status": "livre", "paciente": "","gravidade":"","ingresso":None},
+#        "leito10": {"status": "livre", "paciente": "","gravidade":"","ingresso":None},
+#
+#    },
+#    "ala-1": {
+#        "leitoA": {"status": "livre", "paciente": "","gravidade":"","ingresso":None},
+#        "leitoB": {"status": "ocupado", "paciente": "Pedro","gravidade":"estável","ingresso": datetime.datetime(2023, 8, 3, 5, 30)},
+#        "leitoC": {"status": "ocupado", "paciente": "Ana","gravidade":"leve","ingresso": datetime.datetime(2023, 11, 6, 1, 30)},
+#    },
+#    "ala-2":{
+#        "leitoA": {"status":"livre", "paciente":"","gravidade":"","ingresso": None},
+#        "leitoB": {"status": "ocupado", "paciente": "Amilton","gravidade":"crítico","ingresso": datetime.datetime(2023, 11, 7, 13, 45)},
+#        "leitoC": {"status": "ocupado", "paciente": "Jose","gravidade":"crítico","ingresso": datetime.datetime(2023, 11, 8, 15, 0)},
+#        "leitoD": {"status": "livre", "paciente": "","gravidade":"","ingresso":None},
+#        "leitoE": {"status": "livre", "paciente": "","gravidade":"","ingresso":None},
+#        "leitoF": {"status": "livre", "paciente": "","gravidade":"","ingresso":None},
+#
+#    }
+#    
+#}
+#
+#def updateStatusLeitos(hospital_data):
+#    #para atualizar os leitos em tempo real
+#    while True:
+#        for ala, leitos in hospital_data.items():
+#            for leito, info in leitos.items():
+#                #simular a ocupação aleatória dos leitos 
+#                if random.random() < 0.7:
+#                    info["status"]="ocupado"
+#                    info["paciente"]="Paciente"+ str(random.randint(1,100))
+#                else:
+#                    info["status"]="livre"
+#                    info["paciente"]=""
+#        #vai atualizar a cada minuto
+#        time.sleep(60)
+#
+#def notificarCapacidadeMax(hospital_data,limiteOcupacao=80):
+#    for ala,leitos in hospital_data.items():
+#        ocupados = sum(1 for leito in leitos.values() if leito["status"]=="ocupado")
+#        total_leitos= len(leitos)
+#        percentual_ocupacao=(ocupados/total_leitos)*100
+#        if percentual_ocupacao >= limiteOcupacao:
+#            print(f"Alerta!!! Ala {ala} quase cheia:")
+#def notificaDisponibilidade(hospital_data):
+#    for ala,leitos in hospital_data.items():
+#        for leito, info in leitos.items():
+#            if info["status"]=="livre":
+#                print(f"Leito {leito} esta livre!")*/
+
+import asyncio
+
+class Paciente:
+    def __init__(self,id_paciente,gravidade,ingresso):
+        self.id_paciente = id_paciente
+        self.gravidade = gravidade
+        self.ingresso = ingresso
+        
+class Ala:
+    def __init__(self,tipo_ala,num_leitos):
+        #numero de leitos em cada ala
+        self.num_leitos = num_leitos
+        #que tipo de ala o paciente vai ficar 
+        self.tipo_ala = tipo_ala
+        self.leitos = []
+        #cria uma lista de leitos
+        for num in range(1,num_leitos + 1):
+            self.leitos.append({
+                'numero_do_leito': num,
+                'status':'livre',
+                'IDpaciente': None
+            })
+            
+    def imprimir_leitos(self):
+        for leito in self.leitos:
+            print(f"Leito {leito['numero_do_leito']}: {leito['status']},  {leito['paciente']}")
+            
+     def verificar_ala_quase_cheia(self, percent_limite=80):
+        ocupados = 0
+        for leito in self.leitos:
+            if leito['status'] == 'ocupado':
+                ocupados += 1
+        capacidade = len(self.leitos)
+        percent_ocupacao = (ocupados / capacidade) * 100
+        if percentual_ocupacao >= percent_limite:
+            print(f"A ala {self.tipo_ala} está se aproximando da capacidade máxima.\n Ocupação atual: {percentual_ocupacao}%"):
+        
+    async def verificar_ala_tempreal(self, percent_limite=80):
+        while True:
+            ocupados = sum(1 for leito in self.leitos if leito['status'] == 'ocupado')
+            capacidade = len(self.leitos)
+            percentual_ocupacao = (ocupados / capacidade) * 100
+
+            if percentual_ocupacao >= percent_limite:
+                print(f"A ala {self.nome} está se aproximando da capacidade máxima. Ocupação atual: {percentual_ocupacao}%")
+                
+            await asyncio.sleep(60)
+
+    def achar_leito(self,num_leito):
+        for leito in self.leitos:
+            if leito['numero_do_leito']== num_leito:
+                return leito
+            else:
+                print(f"Leito de numero {num_leito} não encontrado.")
+            
+        return None
+        
+            
+    def ocupar_leito(self,num_leito,tipo_ala,paciente):
+        leito = self.achar_leito(num_leito)
+        if leito['status'] == "disponivel":
+            if paciente.gravidade == "baixa":
+                if self.tipo == "UTI":
+                    print(f"Paciente com gravidade {paciente.gravidade}, sem necessidade de ingressar na UTI.")    
+                elif self.tipo == "ala1"    
+                    
+                    
+            
+                    leito['status'] == "ocupado"
+                    leito['paciente'] == paciente.id_paciente
+                    print(f"Paciente {paciente.id_paciente} acaba de ocupar o leito {num_leito} na {self.tipo_ala}")
+                
+        else:
+            print(f"Leito {num_leito} está ocupado, tente outro numero de leito.")
+            
+    def liberar_leito(self,num_leito):
+        leito = self.achar_leito(num_leito)
+        if leito['status'] == "ocupado":
+            leito['status'] == "disponivel"
+            leito['paciente'] == None
+        else:
+            print(f"Leito {num_leito} já foi esvaziado.")
+        
+        
