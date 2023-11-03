@@ -1,0 +1,42 @@
+Nome: Respirador
+Numero de serie: 2art323
+Data de aquisicao: 20/08/2001
+Data de manutencao: 23/12/2001
+Tipo de manutencao: Correcao no funcionamento
+Quantidade de intervencoes: 1
+
+Nome: Monitor cardiaco
+Numero de serie: tti342h
+Data de aquisicao: 10/01/2000
+Data de manutencao: 22/09/2003
+Tipo de manutencao: Correcao no monitor
+Quantidade de intervencoes: 2
+
+Nome: teclado
+Numero de serie: opop123
+Data de aquisicao: 20/10/2000
+Data de manutencao: Equipamento Novo
+Tipo de manutencao: 
+Quantidade de intervencoes: 
+
+Nome: monitor gamer
+Numero de serie: opasdas1
+Data de aquisicao: 10/12/2004
+Data de manutencao: Equipamento Novo
+Tipo de manutencao: 
+Quantidade de intervencoes: 
+
+Nome: coisaas
+Numero de serie: aspodnq
+Data de aquisicao: 10/12/2004
+Data de manutencao: Equipamento Novo
+Tipo de manutencao: 
+Quantidade de intervencoes: 
+
+
+Nome: pqp
+Numero de serie: apsofas
+Data de aquisicao: 20/3/2005
+Data de manutencao: Equipamento Novo
+Tipo de manutencao: 
+Quantidade de intervencoes: 
