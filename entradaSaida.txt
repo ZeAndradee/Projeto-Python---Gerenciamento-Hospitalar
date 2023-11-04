@@ -23,3 +23,47 @@ Visitante João autorizado no dia 01/01/2021 para o paciente Pedro
 Visitante Maria autorizado no dia 01/01/2021 para o paciente Vinicius
 ---- Log Entrada e Saida de Visitantes ----
 Visitante José autorizado(a) no dia 01/01/2021 para visitar o paciente 03/11/2023
+---- Log Entrada e Saida de Visitantes ----
+---- Log Entrada e Saida de Visitantes ----
+| ENTRADA VISITANTE | - Visitante José autorizado(a) no dia 03/11/2023 para visitar o paciente Vinicius
+---- Log Entrada e Saida de Visitantes ----
+| ENTRADA VISITANTE | - Visitante José autorizado(a) no dia 03/11/2023 para visitar o paciente Vinicius
+| ENTRADA VISITANTE | - Visitante João autorizado(a) no dia 03/11/2023 para visitar o paciente Pedro
+| SAIDA VISITANTE | - Visitante João liberado(a) no dia 03/11/2023 após visita ao paciente Pedro
+| SAIDA VISITANTE | - Visitante José liberado(a) no dia 03/11/2023 após visita ao paciente Vinicius
+---- Log Entrada e Saida de Visitantes ----
+| ENTRADA VISITANTE | - Visitante José autorizado(a) no dia 04/11/2023 para visitar o paciente Vinicius
+| ENTRADA VISITANTE | - Visitante Maria autorizado(a) no dia 04/11/2023 para visitar o paciente Vinicius
+
+---- Log Entrada e Saida de Visitantes ----
+
+---- Log Entrada e Saida de Visitantes ----
+
+---- Log Entrada e Saida de Visitantes ----
+| ENTRADA VISITANTE | - Visitante Maria autorizado(a) no dia 04/11/2023 para visitar o paciente Vinicius
+
+---- Log Entrada e Saida de Visitantes ----
+
+---- Log Entrada e Saida de Visitantes ----
+
+---- Log Entrada e Saida de Visitantes ----
+
+---- Log Entrada e Saida de Visitantes ----
+
+---- Log Entrada e Saida de Visitantes ----
+| ENTRADA VISITANTE | - Visitante Maria autorizado(a) no dia 04/11/2023 para visitar o paciente Vinicius
+
+---- Log Entrada e Saida de Visitantes ----
+
+---- Log Entrada e Saida de Visitantes ----
+| ENTRADA VISITANTE | - Visitante José autorizado(a) no dia 04/11/2023 para visitar o paciente Vinicius
+
+---- Log Entrada e Saida de Visitantes ----
+| ENTRADA VISITANTE | - Visitante José autorizado(a) no dia 04/11/2023 para visitar o paciente Vinicius
+| ENTRADA VISITANTE | - Visitante ffff autorizado(a) no dia 04/11/2023 para visitar o paciente Vinicius
+| ENTRADA VISITANTE | - Visitante Maria autorizado(a) no dia 04/11/2023 para visitar o paciente Vinicius
+| ENTRADA VISITANTE | - Visitante João autorizado(a) no dia 04/11/2023 para visitar o paciente Pedro
+| ENTRADA VISITANTE | - Visitante kmk autorizado(a) no dia 04/11/2023 para visitar o paciente Pedro
+| SAIDA VISITANTE | - Visitante kmk liberado(a) no dia 04/11/2023 após visita ao paciente Pedro
+| ENTRADA VISITANTE | - Visitante opo autorizado(a) no dia 04/11/2023 para visitar o paciente Pedro
+| SAIDA VISITANTE | - Visitante José liberado(a) no dia 04/11/2023 após visita ao paciente Vinicius

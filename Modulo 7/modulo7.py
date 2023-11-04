@@ -29,6 +29,10 @@ visitantes = [
     visitante3
 ]
 
+visitasAndamento = [
+
+]
+
 #Pacientes Base
 paciente1 = Pacientes("1", "Pedro", 2, "Estavel")
 paciente2 = Pacientes("2", "Ana", 0, "Isolamento")
@@ -40,33 +44,36 @@ pacientes = [
     paciente3
 ]
 
-#TODO Registro de entrada e saida de visitantes
-#TODO Notificação de visitas pendentes
-#TODO Verificar se a data de autorização não está expirada
+
 
 def menuInicial(): 
-     
-    print("\n---- Gerenciamento de Visitantes ----\n\n1. Cadastro de Visitantes\n2. Autorizar Visitante\n3. Lista Visitantes\n4. Lista Pacientes\n5. Sair\n")
-    escolhaMenu = int(input("\nDigite o numero da opcao desejada: "))
+    try: 
+        print("\n---- Gerenciamento de Visitantes ----\n\n1. Cadastro de Visitantes\n2. Autorizar Visitante\n3. Liberar Paciente\n4. Lista Visitantes\n5. Lista Pacientes\n6. Sair\n")
+        escolhaMenu = int(input("\nDigite o numero da opcao desejada: "))
 
-    match escolhaMenu:
-        case 1:
-            cadastrarVisitante()
-        case 2:
-            autorizarVisitante()
-        case 3:
-            inFuncao = False
-            listaVisitantes(inFuncao)
-        case 4:
-            inFuncao = False
-            listaPacientes(inFuncao)
-        case 5:
-            print("Saindo...")
-            
-        case _:
-            print("\nOpção inválida, tente novamente!\n")
-            menuInicial()          
-    
+        match escolhaMenu:
+            case 1:
+                cadastrarVisitante()
+            case 2:
+                autorizarVisitante()
+            case 3:
+                liberarVisitante()   
+            case 4:
+                inFuncao = False
+                listaVisitantes(inFuncao)
+            case 5:
+                inFuncao = False
+                listaPacientes(inFuncao)
+            case 6:
+                print("Saindo...")
+                SystemExit
+                
+            case _:
+                print("\nOpção inválida, tente novamente!\n")
+                menuInicial()          
+    except:
+        print("\nOpção inválida, tente novamente!\n")
+        menuInicial()
 
 
 def cadastrarVisitante():
@@ -91,7 +98,8 @@ def cadastrarVisitante():
             pacienteEncontrado = True
             if paciente.limiteVisitantes > 0:
                 relacaoPaciente = input("Relação com o paciente: ")
-                dataAutorizacao = input("Data de autorização: ")
+                now = datetime.now()
+                dataAutorizacao = now.strftime("%d/%m/%Y")
                 visitante = Visitantes(idVisitante, nomeVisitante, rgVisitante, relacaoPaciente, dataAutorizacao,escolhaPaciente, False)
                 visitantes.append(visitante)
                 print("\nVisitante cadastrado com sucesso!\n")
@@ -103,10 +111,11 @@ def cadastrarVisitante():
         print("\nPaciente não encontrado, tente novamente!\n")
         menuInicial()    
 
+
 def autorizarVisitante():
     print("\n---- Autorizar Visitante ----\n")
-    listaVisitantes(inFuncao = True)
 
+    listaVisitantes(inFuncao = True)
     idVisitante = input("Id do visitante: ")
     visitanteEncontrado = False
     for visitante in visitantes:
@@ -119,16 +128,15 @@ def autorizarVisitante():
                         paciente.limiteVisitantes -= 1
                         visitanteEncontrado = True
                         print("\nVisitante autorizado com sucesso!\n")
-
                         now = datetime.now()
                         horaAtual = now.strftime("%d/%m/%Y")
                         with open("entradaSaida.txt", "a") as arquivo:
                             arquivo.write(f"| ENTRADA VISITANTE | - Visitante {visitante.nome} autorizado(a) no dia {horaAtual} para visitar o paciente {paciente.nome}\n")
+                        visitasAndamento.append(visitante)
                         visitante.visitou = True
                         for visitante in visitantes:
                             if visitante.visitou == True:
                                 visitantes.remove(visitante)
-
                         menuInicial()
                     else:
                         print("\nPaciente não pode receber visitas! \n")
@@ -138,8 +146,35 @@ def autorizarVisitante():
         menuInicial()        
 
 
+def liberarVisitante():
+    print("\n---- Liberar Visitante ----\n")
+    if len(visitasAndamento) == 0:
+        print("\nNão há visitantes para liberar!\n")
+        menuInicial()
+    for visitante in visitasAndamento:
+        print(f"Id: {visitante.id} - Visitante {visitante.nome} - Paciente: {visitante.paciente}")
+    idVisitante = input("\nEscolha o visitante: \nId do visitante: ")
+    visitanteEncontrado = False
+    for visitante in visitasAndamento:
+        if idVisitante.lower() == visitante.id.lower():
+            visitanteEncontrado = True
+            idPacienteEscolhido = visitante.paciente
+            for paciente in pacientes:
+                if idPacienteEscolhido.lower() == paciente.id.lower():
+                    paciente.limiteVisitantes += 1
+                    print("\nVisitante liberado com sucesso!\n")
+                    now = datetime.now()
+                    horaAtual = now.strftime("%d/%m/%Y")
+                    with open("entradaSaida.txt", "a") as arquivo:
+                        arquivo.write(f"| SAIDA VISITANTE | - Visitante {visitante.nome} liberado(a) no dia {horaAtual} após visita ao paciente {paciente.nome}\n")
+                    visitasAndamento.remove(visitante)
+                    menuInicial()
+    if not visitanteEncontrado:
+        print("\nVisitante não encontrado, tente novamente!\n")
+        menuInicial()    
+
+
 def listaVisitantes(inFuncao):
-    #TODO Exibir o nome e n o id do paciente
     count = 0
     print("\n---- Lista de Visitantes ----\n")
     for visitante in visitantes:
@@ -162,8 +197,6 @@ def listaPacientes(inFuncao):
 
 
 with open("entradaSaida.txt", "a") as arquivo:
-    arquivo.write("---- Log Entrada e Saida de Visitantes ----\n")
-
-with open("visitasPendentes.txt", "a") as arquivo:
-    arquivo.write("---- Log Visitas Pendentes ----\n")            
-menuInicial()        
+    arquivo.write("\n---- Log Entrada e Saida de Visitantes ----\n")
+menuInicial()
+       
