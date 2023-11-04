@@ -1,5 +1,6 @@
 from datetime import datetime
 import asyncio
+import os
 
 class paciente:
     def __init__(self, nome, idade, sexo, historico, contato, gravidade, ingresso, horario, id_paciente, limiteVisitantes, condicao_diagnostico,leito ):
@@ -44,7 +45,31 @@ class Ala:
         percent_ocupacao = (ocupados / capacidade) * 100
         if percent_ocupacao >= percent_limite:
             print(f"A ala {self.tipo_ala} está se aproximando da capacidade máxima.\n Ocupação atual: {percent_ocupacao}%")
-        
+            
+    def calcular_estatisticas_com_arquivo(self):
+        ocupados = 0
+        livres = 0
+        try:
+            with open(f'{self.tipo_ala}_historico.txt', 'r') as arquivo:
+                for linha in arquivo:
+                    dados = linha.strip().split(' , ')
+                    if len(dados) == 5:
+                        status = dados[2]
+                        if status == 'ocupado':
+                            ocupados += 1
+                        elif status == 'disponivel':
+                            livres += 1
+        except FileNotFoundError:
+            print(f"Arquivo de histórico de ocupação da ala {self.tipo_ala} não encontrado.")
+
+        capacidade = len(self.leitos)
+        percentual_ocupacao = (ocupados / capacidade) * 100
+        print(f"Relatório da Ala {self.tipo_ala}:")
+        print(f"Leitos ocupados: {ocupados}")
+        print(f"Leitos livres: {livres}")
+        print(f"Taxa de ocupação: {percentual_ocupacao:.2f}%")
+        print()
+     
     async def verificar_ala_tempreal(self, percent_limite=80):
         while True:
             ocupados = sum(1 for leito in self.leitos if leito['status'] == 'ocupado')
@@ -137,13 +162,13 @@ def main():
     uti = Ala('UTI', 10)
     ala1 = Ala('ala1', 15)
     ala2 = Ala('ala2', 20)
-    
     while True:
         print("-----menu de gestão de leitos-----")
         print("Escolha uma opção:")
         print("[1] Ocupar leito")
         print("[2] Liberar leito")
         print("[3] ler histórico de ocupação")
+        print("[4] acessar relatórios de ocupação")
         print("[5] Sair")
         escolha = int(input("Opção: "))
         if escolha == 1:
@@ -195,6 +220,10 @@ def main():
                     print(registro)
                     
         elif escolha == 4:
+             for ala in [uti, ala1, ala2]:
+                ala.calcular_estatisticas_com_arquivo()               
+                    
+        elif escolha == 5:
             break
                 
                 
