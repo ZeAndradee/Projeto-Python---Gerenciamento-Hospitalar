@@ -1,0 +1,25 @@
+---- Log Entrada e Saida de Visitantes ----
+---- Log Entrada e Saida de Visitantes ----
+Visitante Guilherme autorizado no dia 03/11 para o paciente Pedro
+---- Log Entrada e Saida de Visitantes ----
+---- Log Entrada e Saida de Visitantes ----
+---- Log Entrada e Saida de Visitantes ----
+---- Log Entrada e Saida de Visitantes ----
+Visitante José autorizado no dia 01/01/2021 para o paciente Vinicius
+---- Log Entrada e Saida de Visitantes ----
+Visitante José autorizado no dia 01/01/2021 para o paciente Vinicius
+---- Log Entrada e Saida de Visitantes ----
+Visitante José autorizado no dia 01/01/2021 para o paciente Vinicius
+---- Log Entrada e Saida de Visitantes ----
+Visitante José autorizado no dia 01/01/2021 para o paciente Vinicius
+---- Log Entrada e Saida de Visitantes ----
+Visitante Maria autorizado no dia 01/01/2021 para o paciente Vinicius
+---- Log Entrada e Saida de Visitantes ----
+Visitante José autorizado no dia 01/01/2021 para o paciente Vinicius
+---- Log Entrada e Saida de Visitantes ----
+Visitante José autorizado no dia 01/01/2021 para o paciente Vinicius
+Visitante João autorizado no dia 01/01/2021 para o paciente Pedro
+---- Log Entrada e Saida de Visitantes ----
+Visitante Maria autorizado no dia 01/01/2021 para o paciente Vinicius
+---- Log Entrada e Saida de Visitantes ----
+Visitante José autorizado(a) no dia 01/01/2021 para visitar o paciente 03/11/2023

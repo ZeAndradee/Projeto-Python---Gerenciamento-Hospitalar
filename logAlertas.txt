@@ -1,18 +1,3 @@
------- Log de Alertas -----
-| QTD SUPERIOR | Medicamento: Tylenol - Quantidade Requisitada 80 - Quantidade Dispon�vel: 44
-| QTD SUPERIOR | Medicamento: Tylenol - Quantidade Requisitada 98 - Quantidade Dispon�vel: 44
-| Rastreio Lote | Medicamento: Dorflex - Lote: K123
-| Rastreio Lote | Medicamento: Tylenol - Lote: K123
-
-
------- Log de Alertas -----
-
-
------- Log de Alertas -----
-| ESTOQUE BAIXO | Medicamento: Tylenol - Quantidade: 5 - Quantidade Inicial: 45
-| ESTOQUE BAIXO | Medicamento: Dorflex - Quantidade: 4 - Quantidade Inicial: 20
-| Rastreio Lote | Medicamento: Dorflex - Lote: K123
-| Rastreio Lote | Medicamento: Tylenol - Lote: K123
 
 
 ------ Log de Alertas -----
@@ -22,16 +7,3 @@
 
 
 ------ Log de Alertas -----
-
-
------- Log de Alertas -----
-
-
------- Log de Alertas -----
-| MEDICAMENTO RETIRADO | Medicamento: Tylenol - Quantidade Retirada: 90
-
-
------- Log de Alertas -----
-| MEDICAMENTO RETIRADO | Medicamento: Tylenol - Quantidade Retirada: 90
-| QTD SUPERIOR | Medicamento: Tylenol - Quantidade Requisitada 90 - Quantidade Disponivel: 0
-| ESTOQUE BAIXO | Medicamento: Tylenol - Quantidade: 0 - Quantidade Inicial: 45

@@ -1,16 +1,10 @@
------- Log de Administracao de Medicamentos -----
-| ADIMINISTRACAO | Medicamento: Tylenol - Quantidade: 1 - Dose Administrada: 100.0mg - Paciente: None ( 02/11/2023 19:08:00 )
 
 
 ------ Log de Administracao de Medicamentos -----
-| ADIMINISTRACAO | Medicamento: Tylenol - Quantidade: 40 - Dose Administrada: 100.0mg - Paciente: None - Responsavel Administracao: None | ( 02/11/2023 20:03:42 )
-| ADIMINISTRACAO | Medicamento: Tylenol - Quantidade: 3 - Dose Administrada: 100.0mg - Paciente: None - Responsavel Administracao: None | ( 02/11/2023 20:04:44 )
 
 
 ------ Log de Administracao de Medicamentos -----
-| ADIMINISTRACAO | Medicamento: Tylenol - Quantidade: 40 - Dose Administrada: 100.0mg - Paciente: None - Responsavel Administracao: None | ( 02/11/2023 20:05:19 )
-| ADIMINISTRACAO | Medicamento: Dorflex - Quantidade: 16 - Dose Administrada: 100.0mg - Paciente: None - Responsavel Administracao: None | ( 02/11/2023 20:06:13 )
 
 
 ------ Log de Administracao de Medicamentos -----
-| ADIMINISTRACAO | Medicamento: Tylenol - Quantidade: 0 - Dose Administrada: 1000.0mg  - Dose Recomendada: 750mg- Paciente: None - Responsavel Administracao: None | ( 02/11/2023 20:16:23 )
+| ADIMINISTRACAO | Medicamento: Tylenol - Quantidade: 1 - Dose Administrada: 750.0mg  - Dose Recomendada: 750mg- Paciente: None - Responsavel Administracao: None | ( 03/11/2023 21:33:14 )
