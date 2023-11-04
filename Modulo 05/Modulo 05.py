@@ -146,7 +146,7 @@ def evolucao_clinica():
     for nomes, id in nomes_pacientes.items():
         print(f"Nome: {nomes}\nID: {id}\n ")
     escolha_paciente_evolucao = input("Escolha um paciente: ")
-    if escolha_paciente_evolucao in nomes_pacientes.keys():
+    if escolha_paciente_evolucao.capitalize() in nomes_pacientes.keys():
         evolucao_paciente = input("Informe quais evolucoes o paciente apresentou durante o periodo do tratamento: ")
         escolha_paciente_evolucao = escolha_paciente_evolucao + nomes_pacientes[escolha_paciente_evolucao] + ".txt"
         with open(escolha_paciente_evolucao, "a")as arquivo:
