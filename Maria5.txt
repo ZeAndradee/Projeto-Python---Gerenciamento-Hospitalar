@@ -1,0 +1,22 @@
+Nome: Maria
+Idade: 20
+Sexo: F
+Historico: nenhum
+Contato: 123456789
+Data de ingresso: 01/01
+Horario: 15:20
+ID: 1
+Limite de visitantes: 2
+Condicao do paciente: estavel 
+
+Condicao: paciente sofreu foi atropelada por um onix 2017 (famoso carro atropeleou matou)
+Data: 4/11
+Tratamento recomendado: repouso de tratamento medico urgente
+
+Medicamentos: nenhum
+Quantidade do medicamento: 0
+Procedimento: cirurgia
+Terapia:fisioterapia
+ 
+Atualizcao do caso do paciente:
+o paciente apresentou uma baixa evolucao no tratamento, mas ainda esta melhorando
