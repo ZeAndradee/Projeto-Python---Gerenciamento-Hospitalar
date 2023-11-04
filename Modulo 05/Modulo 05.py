@@ -84,7 +84,18 @@ def Registro_diagnostico():
         print("Nome não encontrado, por favor tente novamente")
         Registro_diagnostico()
 
-
+def acompanhamento():
+    for nomes, id in nomes_pacientes.items():
+        print(f"Nome: {nomes}\nID: {id}\n\n ")
+    escolha_paciente = input("Digite o nome do paciente: ")
+    if escolha_paciente in nomes_pacientes:
+        medicamento_diagnostico = input("Informe o medicamento que deve ser recomendado: ")
+        try:
+            quantidade_medicamento = int(input("QUantidade(mg): "))
+        except ValueError:
+            print("Quantidade inválida, tente novamente\n")
+        procedimento = input("Qual procedimento o paciente deverá seguir?: ")
+        
 
 def Menu_diagnostico():
     escolha_menu_diagnostico = int(input("\n\nEscolha uma opção abaixo: "))
