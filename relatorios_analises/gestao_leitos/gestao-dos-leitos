@@ -1,6 +1,7 @@
 from datetime import datetime
 import asyncio
 import os
+import json
 
 class paciente:
     def __init__(self, nome, idade, sexo, historico, contato, gravidade, ingresso, horario, id_paciente, limiteVisitantes, condicao_diagnostico,leito ):
@@ -86,7 +87,7 @@ class Ala:
         try:
             with open(f'{self.tipo_ala}_historico.txt', 'r') as arquivo:
                 for linha in arquivo:
-                    dados = linha.strip().split(' , ')
+                    dados = linha.strip().split(', ')
                     if len(dados) == 5:
                         registro = {
                             'tipo_ala': dados[0],
@@ -113,26 +114,44 @@ class Ala:
         except Exception as e:
             print(f"Erro ao arquivar o histórico: {e}")
         
-            
-    def ocupar_leito(self,tipo_ala,id_paciente,gravidade):
-        for leito  in self.leitos:
-         if leito['status'] == 'livre':
-            if gravidade == 'grave' and leito[tipo_ala] == 'UTI':
-                leito['status'] = 'ocupado'
-                leito['IDpaciente'] = id_paciente
-                self.verificar_ala_tempreal
-                print(f" O leito {leito['numero_do_leito']} esta ocupado pelo paciente {id_paciente}")
-                self.registrar(tipo_ala,leito['numero_do_leito']) # type: ignore
-                break
-            elif gravidade == 'pouco grave' or 'leve' and leito[tipo_ala] == 'ala1' or 'ala2':
-                leito['status'] = 'ocupado'
-                leito['IDpaciente'] = id_paciente
-                leito['tempo'] = datetime.now()
-                print(f" O leito {leito['numero_do_leito']} esta ocupado pelo paciente {id_paciente}")
-                break
-        self.verificar_ala_quase_cheia
-            
-    
+        
+    def ocupar_leito(self,tipo_ala):
+        
+        if self.
+        with open(f'{tipo_ala}_historico.txt','w') as arquivo:
+        
+             
+    #def ocupar_leito(self,tipo_ala,id_paciente,gravidade):
+    #    for leito  in self.leitos:
+    #     if leito['status'] == 'livre':
+    #        if gravidade == 'grave':
+    #            if leito['tipo_ala'] == 'UTI':
+    #                leito['status'] = 'ocupado'
+    #                leito['IDpaciente'] = id_paciente
+    #                self.verificar_ala_tempreal
+    #                print(f" O leito {leito['numero_do_leito']} esta ocupado pelo paciente {id_paciente}")
+    #                self.registrar_leito(tipo_ala,leito['numero_do_leito']) # type: ignore
+    #                break
+    #            if leito['tipo_ala'] == "ala1" or leito['tipo_ala'] == "ala2":
+    #                print(f"Paciente como id {id_paciente} deve ser alojado na ala UTI ao invés de outra ala. \n tentar novamente.")
+    #        elif gravidade == 'pouco grave' or 'leve': 
+    #            if leito['tipo_ala'] == "ala1":
+    #                leito['status'] = 'ocupado'
+    #                leito['IDpaciente'] = id_paciente
+    #                leito['tempo'] = datetime.now()
+    #                print(f" O leito {leito['numero_do_leito']} esta ocupado pelo paciente {id_paciente}")
+    #                self.registrar_leito(tipo_ala,leito['numero_do_leito'])
+    #                break
+    #            elif leito['tipo_ala'] == "ala2":
+    #                leito['status'] = 'ocupado'
+    #                leito['IDpaciente'] = id_paciente
+    #                leito['tempo'] = datetime.now()
+    #                print(f" O leito {leito['numero_do_leito']} esta ocupado pelo paciente {id_paciente}")
+    #                self.registrar_leito(tipo_ala,leito['numero_do_leito'])
+    #                break
+    #    self.verificar_ala_quase_cheia()
+    #        
+    #
     def liberar_leito(self, num_leito):
         leito_encontrado = None
         for leito in self.leitos:
@@ -154,7 +173,7 @@ class Ala:
                  arquivo.write(f"{self.tipo_ala},{num_leito},disponivel,None,{leito_encontrado['tempo']}\n")
         else:
             print(f"Leito {num_leito} não pode ser liberado ou já está disponível.")
-        
+        self.verificar_ala_quase_cheia()
         
         
 def main():
@@ -203,13 +222,13 @@ def main():
             ala = input("Insira o nome da ala [ala1,ala2,UTI]: ")
             if ala == 'UTI':
                   histuti = uti.ler_historico_ocupacao()
-                  print("histprico de ocupação da UTI: ")
+                  print("historico de ocupação da UTI: ")
                   for registro in histuti:
                       print(registro)
                       
             elif ala == 'ala1':
                 histala1 = ala1.ler_historico_ocupacao()
-                print("histprico de ocupação da ala 1: ")
+                print("historico de ocupação da ala 1: ")
                 for registro in histala1:
                     print(registro)
                     
