@@ -25,7 +25,7 @@ class Ala:
         self.num_leitos = num_leitos
         #que tipo de ala o paciente vai ficar 
         self.tipo_ala = tipo_ala
-        
+        #criei um dicionario para colocar os dados de cada ala
         self.dados_ala = {
             'leitos': [],
             'historico_ocupacao' : []
