@@ -1,4 +1,3 @@
-
 from datetime import datetime
 import json
 import schedule
@@ -49,7 +48,16 @@ class Ala:
     def salvar_dados_em_arquivo(self,arquivo):
         with open(f"{arquivo}.txt","w") as arquiv:
             json.dump(self.dados_ala,arquiv)
-            
+    
+    def registrar_historico(self,acao, num_leito,id_paciente,gravidade):
+        registro = {
+            'num_do_leito': num_leito,
+            'acao': acao,
+            'IDpaciente': id_paciente,
+            'gravidade': gravidade,
+        }
+        
+        self.dados_ala['historico_ocupacsao']
     def ocupar_leito(self,num_leito,IDpaciente,gravidade):
         leitos_disponiveis = [
             leito for leito in self.dados_ala['leitos']
