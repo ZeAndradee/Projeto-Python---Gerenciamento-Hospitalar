@@ -1,0 +1,274 @@
+from datetime import datetime
+import json
+import time
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+
+class paciente:
+    def __init__(self, nome, idade, sexo, historico, contato, gravidade, ingresso, horario, id_paciente, limiteVisitantes, condicao_diagnostico):
+        self.nome = nome
+        self.idade = idade
+        self.sexo = sexo
+        self.historico = historico
+        self.contato = contato
+        self.gravidade = gravidade
+        self.ingresso = ingresso
+        self.id_paciente = id_paciente
+        self.limiteVisitantes = limiteVisitantes 
+        self.condicao_diagnostico = condicao_diagnostico
+        self.horario = horario
+
+        
+class Ala:
+    def __init__(self,tipo_ala,num_leitos):
+        #numero de leitos em cada ala
+        self.num_leitos = num_leitos
+        #que tipo de ala o paciente vai ficar 
+        self.tipo_ala = tipo_ala
+        #criei um dicionario para colocar os dados de cada ala
+        self.dados_ala = {
+            'leitos': [],
+            'historico_ocupacao' : []
+        }
+        
+        #leitos vão ser criados automaticamente 
+        for i in range(1,num_leitos + 1):
+            leito = {
+                'tipo_ala': self.tipo_ala,
+                'num_do_leito' : i,
+                'status' : 'livre',
+                'IDpaciente':None,
+                'gravidade': ''
+            }
+            #adicionar o leito novo a lista leitos 
+            self.dados_ala['leitos'].append(leito)
+        self.salvar_dados_em_arquivo(f'{self.tipo_ala}.txt')    
+            
+    def salvar_dados_em_arquivo(self,arquivo):
+        with open(f"{arquivo}.txt","w") as arquiv:
+            json.dump(self.dados_ala,arquiv)
+    
+    def registrar_historico(self,acao, num_leito,id_paciente,gravidade):
+        registro = {
+            'num_do_leito': num_leito,
+            'acao': acao,
+            'IDpaciente': id_paciente,
+            'gravidade': gravidade,
+        }
+        
+        self.dados_ala['historico_ocupacsao'].append(registro)
+        self.salvar_dados_em_arquivo(f"{self.tipo_ala}.txt")
+        
+    def ocupar_leito(self,num_leito,IDpaciente,gravidade):
+        leitos_disponiveis = [
+            leito for leito in self.dados_ala['leitos']
+            if leito['status'] == 'livre'
+        ]
+        if not leitos_disponiveis:
+            return "nenhum leito disponível"
+        leitos_disponiveis.sort(key=lambda leito: gravidade.index(leito['gravidade']))
+        for leito in leitos_disponiveis:
+            if leito['num_do_leito'] == num_leito:
+                leito['status'] = 'ocupado'
+                leito['IDpaciente'] = IDpaciente              
+                hist_leito = leito.copy()
+                self.dados_ala['historico_ocupacao'].append(hist_leito)
+                
+                self.salvar_dados_em_arquivo(f"{self.tipo_ala}.txt")
+                return f"leito {num_leito} reservado para o paciente {IDpaciente}."
+            
+        return f"Leito {num_leito} não disponível ou já ocupado."
+    
+    def ler_historico_ocupacao(self):
+        return self.dados_ala['historico_ocupacao']
+    
+    def gerar_relatorio_periodico(self):
+        data_hora = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        relatorio = f"Relatório de ocupação de leitos - {data_hora}\n"
+
+        estatisticas = self.calcular_estatisticas_da_ala()
+        relatorio += f"\n{self.tipo_ala}:\n{estatisticas}"
+
+        with open(f"relatorio_{self.tipo_ala}.txt", "a") as arquivo:
+            arquivo.write(relatorio)
+    def imprimir_historico(self):
+        historico = self.dados_ala.get('historico_ocupacao',[])
+        if not historico:
+            print("Histórico de ocupação vazio.")
+        else:
+            for registro in historico:
+                num_leito = registro['num_do_leito']
+                acao = registro['acao']
+                id_paciente = registro['IDpaciente']
+                gravidade = registro['gravidade']
+                print(f"Leito {num_leito}: {acao} \n- Paciente: {id_paciente} \n Gravidade: {gravidade} \n")
+    
+    def calcular_estatisticas_da_ala(self):
+        leitos_ocupados = sum(1 for leito in self.dados_ala['leitos'] if leito['status'] == 'ocupado')
+        leitos_livres = sum(1 for leito in self.dados_ala['leitos'] if leito['status'] == 'livre')
+        total_leitos = len(self.dados_ala['leitos'])
+        taxa_ocupacao = (leitos_ocupados / total_leitos) * 100
+        estatisticas = f"Total de leitos: {total_leitos}\n"
+        estatisticas += f"Leitos ocupados: {leitos_ocupados}\n"
+        estatisticas += f"Leitos livres: {leitos_livres}\n"
+        estatisticas += f"Taxa de ocupação: {taxa_ocupacao:.2f}%"
+        return estatisticas
+    def liberar_leito(self,num_leito):
+        for leito in self.dados_ala['leitos']:
+            if leito['num_do_leito'] == num_leito and leito['status'] == 'ocupado':
+                leito['status'] = 'livre'
+                leito['IDpaciente'] = None
+                self.salvar_dados_em_arquivo(f"{self.tipo_ala}.txt")
+                return f"Leito {num_leito} desocupado com sucesso."
+        return f"Leito {num_leito} não está ocupado ou não existe na ala."
+            
+            
+class TempReal(FileSystemEventHandler):
+    def __init__(self, log_file="registros_alas.log"):
+        self.log_file = log_file
+        
+    def esta_modificado(self,event):
+         if hasattr(event, 'is_directory') and not event.is_directory:
+            with open(f"{event.src_path}",'r') as arquivo:
+                data = arquivo.read()
+                
+            if "leito reservado" in data:
+                with open(f"{self.log_file}","a") as log:
+                    log.write("Operação de reserva de leito: " + data) 
+                    
+            if "Leito liberado" in data:
+                with open(f"{self.log_file}", "a") as log:
+                    log.write("Operação de liberação de leito: " + data)   
+        
+        
+        
+def main():
+    temp_real = TempReal(log_file="registros_alas.log")
+ 
+    uti = Ala('UTI', 10)
+    ala1 = Ala('ala1', 15)
+    ala2 = Ala('ala2', 20)
+    
+    paciente1 = paciente("Pedro", 20, "M", "Nenhum", "123456789", "Grave", "01/01/2021", "15:20", "1", 2, "Estavel")
+    paciente2 = paciente("Ana", 20, "F", "Nenhum", "123456789", "Grave", "01/01/2021", "13:00", "2", 0, "Isolamento")
+    paciente3 = paciente("Vinicius", 20, "M", "Nenhum", "123456789", "Grave", "01/01/2021", "12:30", "3", 3, "Estavel")
+    paciente4 = paciente("João", 20, "M", "Nenhum", "123456789", "Grave", "01/01/2021", "14:00", "4", 2, "Estavel")
+    paciente5 = paciente("Maria", 20, "F", "Nenhum", "123456789", "Grave", "01/01/2021", "09:00", "5", 0, "Isolamento")
+
+    
+    gravidade = {}
+    gravidade[paciente1.gravidade] = paciente1.gravidade
+    gravidade[paciente2.gravidade] = paciente2.gravidade
+    gravidade[paciente3.gravidade] = paciente3.gravidade
+    gravidade[paciente4.gravidade] = paciente4.gravidade
+    gravidade[paciente5.gravidade] = paciente5.gravidade
+    
+    id_pacientes = {}
+    id_pacientes[paciente1.id_paciente] = paciente1.id_paciente
+    id_pacientes[paciente2.id_paciente] = paciente2.id_paciente
+    id_pacientes[paciente3.id_paciente] = paciente3.id_paciente
+    id_pacientes[paciente4.id_paciente] = paciente4.id_paciente
+    id_pacientes[paciente5.id_paciente] = paciente5.id_paciente
+
+    pacientes = []
+    pacientes.append(paciente1)
+    pacientes.append(paciente2)
+    pacientes.append(paciente3)
+    pacientes.append(paciente4)
+    pacientes.append(paciente5)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+        print("-----menu de gestão de leitos-----")
+        print("Escolha uma opção:")
+        print("[1] Ocupar leito")
+        print("[2] Liberar leito")
+        print("[3] ler histórico de ocupação")
+        print("[4] acessar relatórios de ocupação")
+        print("[5] Sair")
+        escolha = int(input("Opção: "))
+        if escolha == 1:
+            acao = "ocupar"
+            ala = input("Insira o nome da ala [ala1,ala2,UTI]: ")
+            grav = input("Insira a gravidade do paciente: ") 
+            for id in id_pacientes.items():
+                print(f"ID: {id}\n")
+            escolha_id = input("Insira o ID do paciente: ")
+            escolha_leito = input("Insira o numero do leito")
+            if escolha_id in id_pacientes:
+                    if ala == 'UTI':
+                        for leito in uti.dados_ala['leitos']:
+                            if leito['num_do_leito'] == escolha_leito:
+                                evento_modificado = uti.ocupar_leito(ala,escolha_id,grav)
+                                uti.registrar_historico(acao,escolha_leito,escolha_id,grav)
+                                temp_real.esta_modificado(evento_modificado)
+            
+            elif ala == 'ala1':
+                evento_modificado = ala1.ocupar_leito(ala,escolha_id,grav)
+                ala1.registrar_historico(acao,escolha_leito,escolha_id,grav)
+                temp_real.esta_modificado(evento_modificado)
+                
+            elif ala == 'ala2':
+                evento_modificado = ala2.ocupar_leito(ala,escolha_id,grav)
+                ala2.registrar_historico(acao,escolha_leito,escolha_id,grav)
+                temp_real.esta_modificado(evento_modificado)
+                
+                
+                
+        elif escolha == 2:
+            acao = "liberar"
+            ala = input("Insira o nome da ala [ala1,ala2,UTI]: ")
+            grav = input("Insira a gravidade do paciente: ") 
+            for id in id_pacientes.items():
+                print(f"ID: {id}\n")
+            escolha_id = input("Insira o ID do paciente: ")
+            escolha_leito = input("Insira o numero do leito a ser liberado: ")
+            if escolha_id in id_pacientes:
+                for leito in ala1.dados_ala['leitos']:
+                    if leito['num_do_leito'] == escolha_leito:
+                        if ala == 'UTI':
+                            evento_modificado = uti.liberar_leito(escolha_leito)
+                            uti.registrar_historico(acao,escolha_leito,escolha_id,grav)
+                            temp_real.esta_modificado(evento_modificado)
+
+                    elif ala == 'ala1':
+                        evento_modificado = ala1.liberar_leito(escolha_leito)
+                        ala1.registrar_historico(acao,escolha_leito,escolha_id,grav)
+                        temp_real.esta_modificado(evento_modificado)
+
+                    elif ala == 'ala2':
+                        evento_modificado = ala2.liberar_leito(escolha_leito)
+                        ala2.registrar_historico(acao,escolha_leito,escolha_id,grav)
+                        temp_real.esta_modificado(evento_modificado)
+                
+                
+        elif escolha == 3:
+            acao = "lendo historico ocupação"
+            ala = input("Insira o nome da ala [ala1,ala2,UTI]: ")
+            if ala == 'UTI':
+                acao = "lendo historico ocupação-UTI"
+                historico = uti.ler_historico_ocupacao()
+                print(historico)
+                
+
+                      
+            elif ala == 'ala1':
+                histala1 = ala1.ler_historico_ocupacao()
+                print("historico de ocupação da ala 1: ")
+                print(histala1)
+                    
+            elif ala == 'ala2':
+                histala2 = ala2.ler_historico_ocupacao()
+                print("historico de ocupação da ala 2")
+                print(histala2)
+                    
+        elif escolha == 4:
+             for ala in [uti, ala1, ala2]:
+                ala.gerar_relatorio_periodico()              
+                    
+        elif escolha == 5:
+            break
+                
+                
+                 
+main()
