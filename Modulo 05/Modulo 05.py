@@ -37,7 +37,7 @@ def cria_paciente():
         id_paciente = input("Id do paciente: ")
         limiteVisitantes = input("Quantidade limite de visitantes: ")
         condicao_diagnostico = input("Condição do paciente: ")
-        novo_paciente = paciente(nome, idade, sexo, historico, contato, gravidade,ingresso, horario, id_paciente, limiteVisitantes, condicao_diagnostico)
+        novo_paciente = paciente(nome.capitalize(), idade, sexo, historico, contato, gravidade,ingresso, horario, id_paciente, limiteVisitantes, condicao_diagnostico)
         pacientes.append(novo_paciente)
         nomes_pacientes[nome] = id_paciente
         dados_paciente = f"Nome: {nome}\nIdade: {idade}\nSexo: {sexo}\nHistorico: {historico}\nContato: {contato}\nData de ingresso: {ingresso}\nHorario: {horario}\nID: {id_paciente}\nLimite de visitantes: {limiteVisitantes}\nCondicao do paciente: {condicao_diagnostico} \n\n"
@@ -63,11 +63,11 @@ nomes_pacientes = {}
 diagnosticos = []
 #adiciona os nomes dos pacientes na lista
 
-nomes_pacientes[paciente1.nome] = paciente1.id_paciente
-nomes_pacientes[paciente2.nome] = paciente2.id_paciente
-nomes_pacientes[paciente3.nome] = paciente3.id_paciente
-nomes_pacientes[paciente4.nome] = paciente4.id_paciente
-nomes_pacientes[paciente5.nome] = paciente5.id_paciente
+nomes_pacientes[paciente1.nome.capitalize()] = paciente1.id_paciente
+nomes_pacientes[paciente2.nome.capitalize()] = paciente2.id_paciente
+nomes_pacientes[paciente3.nome.capitalize()] = paciente3.id_paciente
+nomes_pacientes[paciente4.nome.capitalize()] = paciente4.id_paciente
+nomes_pacientes[paciente5.nome.capitalize()] = paciente5.id_paciente
 
 #adiciona os dados dos pacientes na lista
 pacientes.append(paciente1)
@@ -129,28 +129,35 @@ def ver_diagnosticos_registrados():
     for nomes, id in nomes_pacientes.items():
         print(f"Nome: {nomes}\nID: {id}\n\n ")
     escolha_paciente_registrados = input("Escolha um paciente para acessar seu diagnostico: ")
-    if escolha_paciente_registrados.capitalize() in nomes_pacientes.keys():
-            escolha_paciente_registrados = escolha_paciente_registrados +nomes_pacientes[escolha_paciente_registrados]+ ".txt"
+    escolha_paciente_registrados = escolha_paciente_registrados.capitalize()
+    if escolha_paciente_registrados in nomes_pacientes.keys():
+            escolha_paciente_registrados = escolha_paciente_registrados + nomes_pacientes[escolha_paciente_registrados] + ".txt"
             try: 
                 imprimir_dados_arquivo(escolha_paciente_registrados)
             
             except FileNotFoundError:
                 print("O paciente escolhido não possui diagnostico registrado!")
                 Menu_diagnostico()
+            Menu_diagnostico()
     else:
             print("Paciente não encontrado, por favor tente novamente\n")
             ver_diagnosticos_registrados()
 
 def evolucao_clinica():
-    print("Nessa etapa voce deve informar caso o paciente apresente alguma evolução em seus exames, mudança em sua saúde ou outra observação importante\n")
+    print("\nNessa etapa voce deve informar caso o paciente apresente alguma evolução em seus exames, mudança em sua saúde ou outra observação importante\n")
     for nomes, id in nomes_pacientes.items():
         print(f"Nome: {nomes}\nID: {id}\n ")
     escolha_paciente_evolucao = input("Escolha um paciente: ")
-    if escolha_paciente_evolucao.capitalize() in nomes_pacientes.keys():
-        evolucao_paciente = input("Informe quais evolucoes o paciente apresentou durante o periodo do tratamento: ")
-        escolha_paciente_evolucao = escolha_paciente_evolucao + nomes_pacientes[escolha_paciente_evolucao] + ".txt"
-        with open(escolha_paciente_evolucao, "a")as arquivo:
-            arquivo.write(f"Atualizacao do caso do paciente:\n{evolucao_paciente}")
+    escolha_paciente_evolucao = escolha_paciente_evolucao.capitalize()
+    if escolha_paciente_evolucao in nomes_pacientes.keys():
+        try:
+            evolucao_paciente = input("Informe quais evolucoes o paciente apresentou durante o periodo do tratamento: ")
+            escolha_paciente_evolucao = escolha_paciente_evolucao + nomes_pacientes[escolha_paciente_evolucao] + ".txt"
+            with open(escolha_paciente_evolucao, "a")as arquivo:
+                arquivo.write(f"Atualizacao do caso do paciente:\n{evolucao_paciente}")
+            Menu_diagnostico()
+        except FileNotFoundError:
+            print("O paciente não possui diagnostico, por favor registre um escolhendo a opção 2 do menu\n")
             Menu_diagnostico()
     else:
         print("Paciente não encontrado, tente novamente")
