@@ -4,6 +4,7 @@ import pandas as pd
 arquivo_csv = 'escalas_de_trabalho.csv'
 excel_file = 'horario.xlsx'
 
+
 dias_da_semana = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo']
 horarios = ["00:00 - 12:00","04:00 - 16:00","06:00 - 18:00",
             "08:00 - 20:00","10:00 - 22:00","12:00 - 00:00"]
@@ -21,7 +22,7 @@ class Profissional:
 
     def alocar_turno(self, turno):
         # Adicione o turno à lista de turnos agendados do profissional
-        self.turnos_agendados.append(turno)
+        self.turnos_agendados.append((turno.data,turno.horario))
 
     def solicitar_troca(self,turno_antigo, novo_turno):
         # Lógica para solicitar uma troca de turno
