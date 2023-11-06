@@ -49,6 +49,7 @@ def mostrar_horarios_disponiveis(data):
 # Função para agendar uma visita
 def agendar_visita():
     data = input("Digite a data da visita (formato: YYYY-MM-DD): ")
+    print(disponibilidade[data])
     if data not in disponibilidade:
         print("Data inválida. Escolha uma data disponível.")
         return
@@ -93,13 +94,22 @@ def definir_regras_visita():
     duracao_maxima = int(input("Duração máxima da visita (em minutos): "))
     horarios_permitidos = input("Horários permitidos (separados por espaço): ").split()
 
-    regras_visita[data] = {
-        "max_visitantes": max_visitantes,
-        "duracao_maxima": duracao_maxima,
-        "horarios_permitidos": horarios_permitidos
-    }
+    # Adicionar os horários permitidos à disponibilidade
+    if data in regras_visita:
+        regras_data = regras_visita[data]
+        regras_data["horarios_permitidos"] = horarios_permitidos
+    else:
+        regras_visita[data] = {
+            "max_visitantes": max_visitantes,
+            "duracao_maxima": duracao_maxima,
+            "horarios_permitidos": horarios_permitidos
+        }
 
     print("Regras definidas com sucesso!")
+    disponibilidade[data].extend(horarios_permitidos)
+
+
+
 # Função para mostrar visitantes autorizados para uma visita específica
 def mostrar_visitantes_autorizados(data):
     if data in visitantes_autorizados:
