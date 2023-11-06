@@ -82,7 +82,7 @@ def Registro_diagnostico():
     for nomes, id in nomes_pacientes.items():
         print(f"Nome: {nomes}\nID: {id}\n\n ")
     escolha_paciente = input("Digite o nome do paciente: ")
-    if escolha_paciente in nomes_pacientes:
+    if escolha_paciente.capitalize() in nomes_pacientes:
         try:  
             condicao_diagnostico = input("Informe o diagnostico do paciente: ")
             dia_diagnostico = int(input("Dia em que está sendo feito o diagnostico: "))
