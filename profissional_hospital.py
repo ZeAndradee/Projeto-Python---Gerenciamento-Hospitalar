@@ -21,11 +21,9 @@ class Profissional:
         self.status = "Disponivel"
 
     def alocar_turno(self, turno):
-        # Adicione o turno à lista de turnos agendados do profissional
         self.turnos_agendados.append((turno.data,turno.horario))
 
     def solicitar_troca(self,turno_antigo, novo_turno):
-        # Lógica para solicitar uma troca de turno
         pass
 
 class Turno:
@@ -40,17 +38,14 @@ class Turno:
 
     def alocar_profissional(self, profissional):
 
-        # Alocar um profissional ao turno
         self.profissional_alocado = profissional
         self.status = "Ocupado"
         profissional.status = "Ocupado"
 
     def registrar_horas_trabalhadas(self, inicio, fim, pausas, horas_extras):
-        # Lógica para registrar as horas trabalhadas em um turno
         self.horas_trabalhadas = {"Entrada":inicio,"Saida":fim,"Pausas":pausas,"Horas Extras":horas_extras}
+        
 
-
-# Agora, você pode criar instâncias de enfermeiros, técnicos e turnos:
 
 enfermeiro1 = Profissional("Enfermeiro 1", "Enfermeiro", "5 anos", "contato1","Disponivel")
 enfermeiro2 = Profissional("Enfermeiro 2", "Enfermeiro", "5 anos", "contato1","Disponivel")
@@ -61,7 +56,6 @@ turno2 = Turno(dias_da_semana[0], horarios[1], "12 horas", ["competencia1"])
 turno3 = Turno(dias_da_semana[1], horarios[2], "12 horas", ["competencia2"])
 turno4 = Turno(dias_da_semana[2], horarios[3], "12 horas", ["competencia2"])
 
-# Alocar profissionais em turnos
 turno1.registrar_horas_trabalhadas(3,5,"n","0h")
 turno1.alocar_profissional(enfermeiro1)
 turno2.alocar_profissional(tecnico1)
@@ -70,7 +64,6 @@ turno4.alocar_profissional(enfermeiro2)
 if turno1.profissional_alocado:
     print('ok')
 
-# Exportar dados para um arquivo CSV
 
 with open('escalas_de_trabalho.csv', 'w', newline='') as file:
     writer = csv.writer(file)

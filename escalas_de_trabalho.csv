@@ -1,4 +1,1 @@
-Segunda,00:00 - 12:00,Enfermeiro 1,12 horas,competencia1,"{'Entrada': 3, 'Saida': 5, 'Pausas': 'n', 'Horas Extras': '0h'}",Ocupado
-Segunda,04:00 - 16:00,Técnico 1,12 horas,competencia1,,Ocupado
-Terça,06:00 - 18:00,Não alocado,12 horas,competencia2,,Disponivel
-Quarta,08:00 - 20:00,Enfermeiro 2,12 horas,competencia2,,Ocupado
+Terça,04:00 - 16:00,fdfd,12 Horas,"C, o, m, p, e, t, e, n, c, i, a","{'Entrada': 0, 'Saida': 12, 'Pausas': 1, 'Horas Extras': 12}",Ocupado
